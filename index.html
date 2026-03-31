@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>دليل الفرمتة الاحترافي</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#080c14;--bg2:#0d1220;--bg3:#111827;
+  --blue:#00d4ff;--blue2:#0099cc;--blue3:rgba(0,212,255,.08);
+  --cyan:#00ffcc;--cyan2:rgba(0,255,204,.1);
+  --orange:#ff6b2b;--orange2:rgba(255,107,43,.1);
+  --green:#00ff88;--green2:rgba(0,255,136,.1);
+  --red:#ff3366;
+  --white:#e8f4ff;--muted:#4a6080;
+  --border:rgba(0,212,255,.15);--border2:rgba(0,212,255,.08);
+  --card:#0d1525;
+}
+html,body{height:100%;background:var(--bg);color:var(--white);font-family:Tahoma,Arial,sans-serif;overflow:hidden;}
+body{display:flex;flex-direction:column;}
+
+/* GRID BG */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,212,255,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,212,255,.04) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,100,180,.12),transparent 70%);
+}
+
+/* SCREENS */
+.screen{display:none;flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:90px;position:relative;z-index:1;}
+.screen.active{display:block;}
+.screen::-webkit-scrollbar{width:3px;}
+.screen::-webkit-scrollbar-thumb{background:var(--blue);border-radius:3px;}
+
+/* TAB BAR */
+.tabbar{
+  position:fixed;bottom:0;left:0;right:0;z-index:9999;
+  display:flex;background:var(--bg2);
+  border-top:1px solid var(--border);
+  box-shadow:0 -4px 30px rgba(0,0,0,.6);
+}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 4px 7px;cursor:pointer;
+  color:var(--muted);font-size:9px;font-weight:700;gap:3px;border-top:2px solid transparent;transition:all .2s;}
+.tab.active{color:var(--blue);border-top-color:var(--blue);}
+.tab-ic{font-size:18px;}
+
+/* HERO */
+.hero{
+  padding:24px 16px 20px;text-align:center;position:relative;overflow:hidden;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,#050810 0%,var(--bg) 100%);
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--blue3);border:1px solid var(--border);
+  border-radius:99px;padding:4px 14px;font-size:10px;color:var(--blue);
+  margin-bottom:12px;letter-spacing:.05em;
+}
+.hero-dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 1.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:.4;transform:scale(.8);}50%{opacity:1;transform:scale(1.2);}}
+.hero-title{font-size:26px;font-weight:900;color:var(--blue);line-height:1.2;margin-bottom:6px;
+  text-shadow:0 0 30px rgba(0,212,255,.4);}
+.hero-sub{font-size:12px;color:var(--muted);line-height:1.7;}
+
+/* QUICK STATS */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 16px 0;}
+.stat-box{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:12px;text-align:center;}
+.stat-num{font-size:22px;font-weight:900;color:var(--blue);}
+.stat-lbl{font-size:9px;color:var(--muted);margin-top:2px;}
+
+/* PHASE CARDS on home */
+.phases{padding:14px 16px;}
+.phases-title{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.1em;margin-bottom:12px;text-transform:uppercase;}
+.phase-card{
+  background:var(--card);border-radius:14px;margin-bottom:10px;
+  border:1px solid var(--border2);padding:14px;
+  display:flex;align-items:center;gap:12px;cursor:pointer;
+  transition:all .2s;animation:slideIn .3s ease both;
+}
+@keyframes slideIn{from{opacity:0;transform:translateX(14px);}to{opacity:1;transform:translateX(0);}}
+.phase-card:active{transform:scale(.98);}
+.phase-card:hover{border-color:var(--border);background:#111c30;}
+.pc-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.pc-info{flex:1;}
+.pc-num{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:3px;}
+.pc-name{font-size:14px;font-weight:700;color:var(--white);}
+.pc-sub{font-size:10px;color:var(--muted);margin-top:2px;}
+.pc-arr{color:var(--blue);font-size:18px;}
+
+/* WARNING BOX */
+.warn-box{
+  margin:0 16px 14px;background:rgba(255,51,102,.06);border:1px solid rgba(255,51,102,.25);
+  border-radius:12px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start;
+}
+.warn-ic{font-size:20px;flex-shrink:0;}
+.warn-text{font-size:12px;line-height:1.7;color:#ffaabb;}
+
+/* ── CONTENT SCREENS ── */
+.ch{
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(180deg,var(--bg) 85%,transparent);
+  padding:14px 16px 10px;border-bottom:1px solid var(--border2);
+}
+.ch-back{background:var(--blue3);border:1px solid var(--border);color:var(--blue);padding:6px 14px;border-radius:8px;font-family:Tahoma,Arial,sans-serif;font-size:11px;font-weight:700;cursor:pointer;margin-bottom:8px;}
+.ch-title{font-size:20px;font-weight:900;color:var(--blue);}
+.ch-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+
+.content-body{padding:14px 16px;}
+
+/* INFO CARD */
+.info-card{background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:16px;margin-bottom:12px;animation:slideIn .3s ease both;}
+.ic-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.ic-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.ic-title{font-size:14px;font-weight:700;color:var(--white);}
+.ic-text{font-size:12px;line-height:1.9;color:#8aa0be;}
+.ic-text strong{color:var(--blue);font-weight:700;}
+.ic-text .hl-orange{color:var(--orange);}
+.ic-text .hl-green{color:var(--green);}
+.ic-text .hl-red{color:var(--red);}
+
+/* TIP BOX */
+.tip{background:rgba(0,255,204,.06);border:1px solid rgba(0,255,204,.2);border-radius:10px;padding:10px 12px;margin-top:10px;display:flex;gap:8px;}
+.tip-ic{font-size:16px;flex-shrink:0;}
+.tip-text{font-size:11px;color:#80ffdd;line-height:1.7;}
+
+/* STEP CARD */
+.step-card{background:var(--card);border:1px solid var(--border2);border-radius:14px;margin-bottom:10px;overflow:hidden;animation:slideIn .3s ease both;}
+.step-header{display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer;transition:background .2s;}
+.step-header:hover{background:rgba(0,212,255,.04);}
+.step-num{
+  width:28px;height:28px;border-radius:6px;
+  background:linear-gradient(135deg,var(--blue),var(--blue2));
+  color:#000;font-size:12px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.step-title{font-size:13px;font-weight:700;color:var(--white);flex:1;}
+.step-badge{font-size:9px;background:var(--blue3);border:1px solid var(--border);color:var(--blue);padding:2px 8px;border-radius:99px;}
+.step-arr{color:var(--blue);font-size:16px;transition:transform .3s;flex-shrink:0;}
+.step-card.open .step-arr{transform:rotate(90deg);}
+.step-body{display:none;padding:0 14px 14px;border-top:1px solid var(--border2);}
+.step-card.open .step-body{display:block;animation:fadeIn .2s ease;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.step-text{font-size:12px;line-height:1.9;color:#8aa0be;margin-top:10px;}
+.step-text strong{color:var(--cyan);}
+.step-text .warn{color:var(--orange);}
+.step-text .danger{color:var(--red);}
+
+/* SVG ILLUSTRATIONS */
+.svg-wrap{background:rgba(0,0,0,.3);border:1px solid var(--border2);border-radius:12px;margin:10px 0;overflow:hidden;}
+.svg-label{font-size:10px;color:var(--muted);text-align:center;padding:6px;border-top:1px solid var(--border2);}
+
+/* COMPARE TABLE */
+.compare{width:100%;border-collapse:collapse;margin:10px 0;font-size:11px;}
+.compare th{background:var(--blue3);color:var(--blue);padding:8px 10px;text-align:right;font-size:10px;}
+.compare td{padding:8px 10px;border-bottom:1px solid var(--border2);color:#8aa0be;vertical-align:top;line-height:1.6;}
+.compare tr:last-child td{border:none;}
+.compare .yes{color:var(--green);}
+.compare .no{color:var(--red);}
+
+/* PROGRESS TIMELINE */
+.timeline{padding:4px 0;}
+.tl-item{display:flex;gap:12px;margin-bottom:14px;position:relative;}
+.tl-item::before{content:'';position:absolute;right:14px;top:28px;width:1px;height:calc(100% + 2px);background:var(--border);}
+.tl-item:last-child::before{display:none;}
+.tl-dot{width:28px;height:28px;border-radius:50%;background:var(--blue3);border:2px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:var(--blue);flex-shrink:0;}
+.tl-content{flex:1;padding-top:4px;}
+.tl-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:3px;}
+.tl-text{font-size:11px;color:var(--muted);line-height:1.7;}
+
+/* PROGRAMS LIST */
+.prog-item{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;animation:slideIn .3s ease both;}
+.pi-icon{font-size:28px;flex-shrink:0;}
+.pi-info{flex:1;}
+.pi-name{font-size:13px;font-weight:700;color:var(--white);}
+.pi-why{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.6;}
+.pi-badge{display:inline-block;font-size:9px;padding:2px 8px;border-radius:99px;margin-top:4px;font-weight:700;}
+.free{background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.2);}
+.essential{background:rgba(0,212,255,.1);color:var(--blue);border:1px solid var(--border);}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div class="screen active" id="scHome">
+  <div class="hero">
+    <div class="hero-badge"><span class="hero-dot"></span> دليل احترافي 2026</div>
+    <div class="hero-title">🖥️ دليل الفرمتة<br>الاحترافي</div>
+    <div class="hero-sub">كل شي من الصفر حتى الحاسبة تطير 🚀</div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-num">3</div><div class="stat-lbl">مراحل</div></div>
+    <div class="stat-box"><div class="stat-num">12</div><div class="stat-lbl">خطوة</div></div>
+    <div class="stat-box"><div class="stat-num">5</div><div class="stat-lbl">برامج أساسية</div></div>
+  </div>
+
+  <div class="phases" style="margin-top:14px;">
+    <div class="warn-box" style="margin:0 0 14px;">
+      <span class="warn-ic">⚠️</span>
+      <div class="warn-text">انقل ملفاتك المهمة من الـ C (سطح المكتب، التنزيلات) للـ D قبل ما تبدأ!</div>
+    </div>
+
+    <div class="phases-title">⬡ المراحل</div>
+
+    <div class="phase-card" onclick="go('flash')" style="animation-delay:.05s">
+      <div class="pc-icon" style="background:rgba(0,212,255,.1);border:1px solid var(--border);">💾</div>
+      <div class="pc-info">
+        <div class="pc-num">المرحلة الأولى</div>
+        <div class="pc-name">صناعة فلاشة الويندوز</div>
+        <div class="pc-sub">الجوكر اللي يشتغل على كل الحاسبات</div>
+      </div>
+      <span class="pc-arr">›</span>
+    </div>
+
+    <div class="phase-card" onclick="go('partition')" style="animation-delay:.1s">
+      <div class="pc-icon" style="background:rgba(255,107,43,.1);border:1px solid rgba(255,107,43,.2);">🗂️</div>
+      <div class="pc-info">
+        <div class="pc-num">المرحلة الثانية</div>
+        <div class="pc-name">تقسيم الهارد</div>
+        <div class="pc-sub">C للنظام · D للملفات</div>
+      </div>
+      <span class="pc-arr">›</span>
+    </div>
+
+    <div class="phase-card" onclick="go('install')" style="animation-delay:.15s">
+      <div class="pc-icon" style="background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.2);">⚙️</div>
+      <div class="pc-info">
+        <div class="pc-num">المرحلة الثالثة</div>
+        <div class="pc-name">خطوات الفرمتة كاملة</div>
+        <div class="pc-sub">Step-by-Step من البداية للنهاية</div>
+      </div>
+      <span class="pc-arr">›</span>
+    </div>
+
+    <div class="phase-card" onclick="go('after')" style="animation-delay:.2s">
+      <div class="pc-icon" style="background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.15);">🏁</div>
+      <div class="pc-info">
+        <div class="pc-num">ما بعد الفرمتة</div>
+        <div class="pc-name">أسرار الخبراء</div>
+        <div class="pc-sub">إعدادات + أول 5 برامج ضرورية</div>
+      </div>
+      <span class="pc-arr">›</span>
+    </div>
+  </div>
+</div>
+
+<!-- FLASH SCREEN -->
+<div class="screen" id="scFlash">
+  <div class="ch">
+    <button class="ch-back" onclick="goHome()">← رجوع</button>
+    <div class="ch-title">💾 فلاشة الويندوز</div>
+    <div class="ch-sub">صناعة بوتابل USB يشتغل على كل الحاسبات</div>
+  </div>
+  <div class="content-body">
+
+    <div class="info-card" style="animation-delay:.05s">
+      <div class="ic-header">
+        <div class="ic-icon" style="background:var(--blue3);border:1px solid var(--border);">🛠️</div>
+        <div class="ic-title">الأدوات المطلوبة</div>
+      </div>
+      <table class="compare">
+        <tr><th>الأداة</th><th>التفاصيل</th></tr>
+        <tr><td>🖲️ فلاشة</td><td><strong class="yes">8GB أو أكثر</strong> · يفضل USB 3.0</td></tr>
+        <tr><td>🌐 إنترنت</td><td>لتنزيل الويندوز الرسمي</td></tr>
+        <tr><td>💻 برنامج Rufus</td><td>مجاني وصغير الحجم</td></tr>
+      </table>
+    </div>
+
+    <!-- GPT vs MBR -->
+    <div class="info-card" style="animation-delay:.1s">
+      <div class="ic-header">
+        <div class="ic-icon" style="background:rgba(255,107,43,.1);border:1px solid rgba(255,107,43,.2);">⚡</div>
+        <div class="ic-title">GPT أم MBR؟ — المعلومة الذهبية</div>
+      </div>
+      <!-- SVG: GPT vs MBR -->
+      <div class="svg-wrap">
+        <svg viewBox="0 0 320 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;background:#060c18;">
+          <!-- GPT side -->
+          <rect x="10" y="10" width="140" height="110" rx="10" fill="#0d1525" stroke="rgba(0,212,255,.3)" stroke-width="1.5"/>
+          <text x="80" y="30" text-anchor="middle" font-family="Tahoma" font-size="11" fill="#00d4ff" font-weight="bold">GPT</text>
+          <text x="80" y="46" text-anchor="middle" font-family="Tahoma" font-size="9" fill="#4a6080">حاسبات حديثة (UEFI)</text>
+          <rect x="22" y="55" width="116" height="14" rx="4" fill="rgba(0,212,255,.15)" stroke="rgba(0,212,255,.3)" stroke-width="1"/>
+          <text x="80" y="66" text-anchor="middle" font-family="Tahoma" font-size="9" fill="#00d4ff">System · MSR · Windows · Recovery</text>
+          <text x="80" y="88" text-anchor="middle" font-size="22">✅</text>
+          <text x="80" y="108" text-anchor="middle" font-family="Tahoma" font-size="9" fill="#00ff88">الخيار الصحيح للحاسبات الحديثة</text>
+          <!-- MBR side -->
+          <rect x="170" y="10" width="140" height="110" rx="10" fill="#0d1525" stroke="rgba(255,107,43,.25)" stroke-width="1.5"/>
+          <text x="240" y="30" text-anchor="middle" font-family="Tahoma" font-size="11" fill="#ff6b2b" font-weight="bold">MBR</text>
+          <text x="240" y="46" text-anchor="middle" font-family="Tahoma" font-size="9" fill="#4a6080">حاسبات قديمة (BIOS)</text>
+          <rect x="182" y="55" width="116" height="14" rx="4" fill="rgba(255,107,43,.12)" stroke="rgba(255,107,43,.3)" stroke-width="1"/>
+          <text x="240" y="66" text-anchor="middle" font-family="Tahoma" font-size="9" fill="#ff6b2b">Boot · System · Data</text>
+          <text x="240" y="88" text-anchor="middle" font-size="22">⚠️</text>
+          <text x="240" y="108" text-anchor="middle" font-family="Tahoma" font-size="9" fill="#ff6b2b">للأجهزة القديمة فقط</text>
+        </svg>
+        <div class="svg-label">إذا اختارت غلط ← الويندوز ما ينصب!</div>
+      </div>
+      <div class="ic-text">اختيار صيغة الهارد <strong>مهم جداً</strong>. أغلب الحاسبات بعد 2012 تستخدم <strong>UEFI</strong> وتحتاج <strong class="hl-orange">GPT</strong>.</div>
+    </div>
+
+    <!-- Steps -->
+    <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:10px;text-transform:uppercase;">⬡ خطوات التنفيذ</div>
+
+    <div class="step-card" onclick="toggleStep(this)" style="animation-delay:.15s">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div class="step-title">تنزيل الويندوز الرسمي</div>
+        <span class="step-badge">مجاني</span>
+        <span class="step-arr">›</span>
+      </div>
+      <div class="step-body">
+        <div class="step-text">روح لـ <strong>موقع مايكروسوفت الرسمي</strong> ونزل أداة <strong>Media Creation Tool</strong>.<br><br>
+        هاي الأداة تنزلك أحدث نسخة Windows بصيغة <strong>ISO</strong> وبدون فيروسات.<br><br>
+        <span class="warn">⚡ يفضل: Windows 10 Pro أو Windows 11 Pro</span><br>
+        <span class="warn">⚠️ تجنب نسخ Home — ناقصها ميزات أمان مهمة</span></div>
+      </div>
+    </div>
+
+    <div class="step-card" onclick="toggleStep(this)" style="animation-delay:.2s">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div class="step-title">إعداد Rufus بالشكل الصحيح</div>
+        <span class="step-badge">مهم</span>
+        <span class="step-arr">›</span>
+      </div>
+      <div class="step-body">
+        <!-- SVG Rufus -->
+        <div class="svg-wrap" style="margin-top:10px;">
+          <svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;background:#060c18;">
+            <rect x="10" y="10" width="280" height="120" rx="8" fill="#0d1525" stroke="rgba(0,212,255,.2)" stroke-width="1.5"/>
+            <text x="150" y="30" text-anchor="middle" font-family="Tahoma" font-size="11" fill="#00d4ff" font-weight="bold">Rufus — الإعدادات المهمة</text>
+            <!-- Row 1 -->
+            <rect x="20" y="40" width="260" height="22" rx="4" fill="rgba(0,212,255,.06)" stroke="rgba(0,212,255,.1)" stroke-width="1"/>
+            <text x="30" y="55" font-family="Tahoma" font-size="10" fill="#4a6080">Device:</text>
+            <text x="100" y="55" font-family="Tahoma" font-size="10" fill="#00d4ff">🖲️ اسم الفلاشة مالتك</text>
+            <!-- Row 2 -->
+            <rect x="20" y="67" width="260" height="22" rx="4" fill="rgba(0,212,255,.06)" stroke="rgba(0,212,255,.1)" stroke-width="1"/>
+            <text x="30" y="82" font-family="Tahoma" font-size="10" fill="#4a6080">Boot selection:</text>
+            <text x="130" y="82" font-family="Tahoma" font-size="10" fill="#00d4ff">📁 ملف ISO الويندوز</text>
+            <!-- Row 3 IMPORTANT -->
+            <rect x="20" y="94" width="260" height="22" rx="4" fill="rgba(255,107,43,.08)" stroke="rgba(255,107,43,.3)" stroke-width="1.5"/>
+            <text x="30" y="109" font-family="Tahoma" font-size="10" fill="#ff6b2b">Partition scheme:</text>
+            <text x="145" y="109" font-family="Tahoma" font-size="10" fill="#ff6b2b" font-weight="bold">⚡ GPT (حديث) | MBR (قديم)</text>
+            <text x="150" y="128" text-anchor="middle" font-family="Tahoma" font-size="8" fill="#ff6b2b">← هذا السطر هو السر!</text>
+          </svg>
+          <div class="svg-label">إعدادات Rufus الصحيحة</div>
+        </div>
+        <div class="step-text">دوس <strong>Start</strong> وانتظر. بعد ما يخلص، فلاشتك جاهزة وتشتغل على أي حاسبة.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PARTITION SCREEN -->
+<div class="screen" id="scPartition">
+  <div class="ch">
+    <button class="ch-back" onclick="goHome()">← رجوع</button>
+    <div class="ch-title">🗂️ تقسيم الهارد</div>
+    <div class="ch-sub">C للويندوز · D لملفاتك</div>
+  </div>
+  <div class="content-body">
+
+    <div class="info-card">
+      <div class="ic-header">
+        <div class="ic-icon" style="background:rgba(255,107,43,.1);border:1px solid rgba(255,107,43,.2);">🏠</div>
+        <div class="ic-title">فكرة التقسيم</div>
+      </div>
+      <!-- SVG House analogy -->
+      <div class="svg-wrap">
+        <svg viewBox="0 0 300 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;background:#060c18;">
+          <!-- House shape -->
+          <polygon points="150,15 30,70 270,70" fill="none" stroke="rgba(0,212,255,.4)" stroke-width="2"/>
+          <!-- C room -->
+          <rect x="35" y="70" width="100" height="50" fill="rgba(0,212,255,.08)" stroke="rgba(0,212,255,.3)" stroke-width="1.5" rx="2"/>
+          <text x="85" y="92" text-anchor="middle" font-family="Tahoma" font-size="13" fill="#00d4ff" font-weight="bold">C:</text>
+          <text x="85" y="108" text-anchor="middle" font-family="Tahoma" font-size="9" fill="#4a6080">الويندوز والبرامج</text>
+          <!-- D room -->
+          <rect x="145" y="70" width="120" height="50" fill="rgba(255,107,43,.08)" stroke="rgba(255,107,43,.3)" stroke-width="1.5" rx="2"/>
+          <text x="205" y="92" text-anchor="middle" font-family="Tahoma" font-size="13" fill="#ff6b2b" font-weight="bold">D:</text>
+          <text x="205" y="108" text-anchor="middle" font-family="Tahoma" font-size="9" fill="#4a6080">صورك، أفلامك، شغلك</text>
+          <!-- Arrow down for C -->
+          <text x="85" y="58" text-anchor="middle" font-family="Tahoma" font-size="9" fill="#00d4ff">↓ انفرمت لو انضرب</text>
+          <text x="205" y="58" text-anchor="middle" font-family="Tahoma" font-size="9" fill="#00ff88">↓ ملفاتك آمنة دائماً ✅</text>
+        </svg>
+        <div class="svg-label">الفكرة: إذا انضرب الويندوز فقط الـ C يتأثر</div>
+      </div>
+    </div>
+
+    <!-- Sizes -->
+    <div class="info-card">
+      <div class="ic-header">
+        <div class="ic-icon" style="background:var(--green2);border:1px solid rgba(0,255,136,.2);">📏</div>
+        <div class="ic-title">المساحات المثالية 2026</div>
+      </div>
+      <div class="svg-wrap">
+        <svg viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;background:#060c18;padding:10px;">
+          <!-- Hard bar -->
+          <rect x="10" y="30" width="280" height="28" rx="6" fill="#111827" stroke="rgba(0,212,255,.15)" stroke-width="1"/>
+          <!-- System reserved -->
+          <rect x="10" y="30" width="14" height="28" rx="6" fill="rgba(255,51,102,.5)"/>
+          <text x="17" y="20" text-anchor="middle" font-family="Tahoma" font-size="7" fill="#ff3366">System</text>
+          <!-- C partition -->
+          <rect x="24" y="30" width="100" height="28" rx="0" fill="rgba(0,212,255,.25)" stroke="rgba(0,212,255,.3)" stroke-width="1"/>
+          <text x="74" y="49" text-anchor="middle" font-family="Tahoma" font-size="10" fill="#00d4ff" font-weight="bold">C: — 100~150 GB</text>
+          <!-- D partition -->
+          <rect x="124" y="30" width="166" height="28" rx="0" fill="rgba(255,107,43,.15)" stroke="rgba(255,107,43,.25)" stroke-width="1"/>
+          <text x="207" y="49" text-anchor="middle" font-family="Tahoma" font-size="10" fill="#ff6b2b" font-weight="bold">D: — باقي المساحة</text>
+          <!-- Labels -->
+          <text x="17" y="72" text-anchor="middle" font-family="Tahoma" font-size="7" fill="#4a6080">لا تمس</text>
+        </svg>
+        <div class="svg-label">توزيع مثالي للهارد</div>
+      </div>
+      <div class="ic-text">الـ C لازم <strong>100 إلى 150 GB</strong> على الأقل — الويندوز والتحديثات يكبر حجمهم.<br>
+      <strong class="hl-orange">إذا امتلأ الـ C ← الحاسبة تشنج وتبطأ</strong></div>
+    </div>
+
+    <!-- Warning about system reserved -->
+    <div class="warn-box">
+      <span class="warn-ic">🔴</span>
+      <div class="warn-text"><strong>قاعدة ذهبية:</strong> الويندوز يسوي بارتيشنات صغيرة (100MB أو 500MB) اسمها System Reserved. لا تمسحها أبداً — هي اللي تخلي الويندوز يقلع!</div>
+    </div>
+
+    <!-- Steps -->
+    <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin:12px 0 10px;text-transform:uppercase;">⬡ خطوات التقسيم أثناء الفرمتة</div>
+
+    <div class="step-card" onclick="toggleStep(this)">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div class="step-title">تصفير الهارد</div>
+        <span class="step-arr">›</span>
+      </div>
+      <div class="step-body">
+        <div class="step-text">امسح كل البارتيشنات القديمة (Delete) لحد ما يصير عندك:<br>
+        <strong>Drive 0 — Unallocated Space</strong><br><br>
+        <span class="warn">⚠️ إذا تريد تحافظ على الـ D، لا تمسحه — شوف المرحلة الثالثة</span></div>
+      </div>
+    </div>
+
+    <div class="step-card" onclick="toggleStep(this)">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div class="step-title">صناعة الـ C</div>
+        <span class="step-arr">›</span>
+      </div>
+      <div class="step-body">
+        <div class="step-text">دوس <strong>New</strong> واكتب المساحة بالميجابايت:<br><br>
+        <strong>100 GB = 102400 MB</strong><br>
+        <strong>120 GB = 122880 MB</strong><br>
+        <strong>150 GB = 153600 MB</strong><br><br>
+        دوس <strong>Apply</strong> — الويندوز راح يسوي بارتيشنات صغيرة إضافية <span class="warn">عوفها ولا تمسحها</span></div>
+      </div>
+    </div>
+
+    <div class="step-card" onclick="toggleStep(this)">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div class="step-title">صناعة الـ D</div>
+        <span class="step-arr">›</span>
+      </div>
+      <div class="step-body">
+        <div class="step-text">المساحة اللي بقت — حددها ودوس <strong>New</strong> ثم <strong>Apply</strong> مباشرة.<br><br>
+        هاي راح تصير بارتيشن الملفات. بعد الفرمتة قد تحتاج تفعّله من Disk Management.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- INSTALL SCREEN -->
+<div class="screen" id="scInstall">
+  <div class="ch">
+    <button class="ch-back" onclick="goHome()">← رجوع</button>
+    <div class="ch-title">⚙️ خطوات الفرمتة</div>
+    <div class="ch-sub">من البداية للنهاية بالتفصيل</div>
+  </div>
+  <div class="content-body">
+
+    <div class="warn-box" style="margin:0 0 14px;">
+      <span class="warn-ic">💡</span>
+      <div class="warn-text">إذا تريد تحافظ على الـ D: اعرف حجمه مسبقاً حتى تميزه بشاشة التقسيم ولا تمسحه بالخطأ.</div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot">1</div>
+        <div class="tl-content">
+          <div class="tl-title">دخول Boot Menu</div>
+          <div class="tl-text">اربط الفلاشة وشغّل الحاسبة. ظل دوس على مفتاح البوت:<br>
+          Dell: F12 · HP: F9 · Lenovo: F12 · غيرها: Esc أو F2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">2</div>
+        <div class="tl-content">
+          <div class="tl-title">اختر الفلاشة</div>
+          <div class="tl-text">من القائمة اختر اسم الفلاشة مالتك ودوس Enter</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">3</div>
+        <div class="tl-content">
+          <div class="tl-title">بداية التنصيب</div>
+          <div class="tl-text">اللغة والوقت ← Next ← Install Now</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">4</div>
+        <div class="tl-content">
+          <div class="tl-title">مفتاح التفعيل</div>
+          <div class="tl-text">ما عندك كود؟ دوس: <strong style="color:var(--cyan)">I don't have a product key</strong></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">5</div>
+        <div class="tl-content">
+          <div class="tl-title">نوع التنصيب — مهم!</div>
+          <div class="tl-text">اختر: <strong style="color:var(--orange)">Custom: Install Windows only (advanced)</strong><br>هاي هي الفرمتة الحقيقية</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">6</div>
+        <div class="tl-content">
+          <div class="tl-title">التقسيم</div>
+          <div class="tl-text">سوي الخطوات من المرحلة الثانية. حدد الـ C ودوس Next</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">7</div>
+        <div class="tl-content">
+          <div class="tl-title">الإعدادات النهائية</div>
+          <div class="tl-text">الدولة والكيبورد واسم المستخدم.<br>
+          <strong style="color:var(--cyan)">نصيحة: لا تكنك واي فاي هنا</strong> — دوس "I don't have internet" حتى ما تنتظر حساب مايكروسوفت</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">✅</div>
+        <div class="tl-content">
+          <div class="tl-title" style="color:var(--green)">اكتملت الفرمتة!</div>
+          <div class="tl-text">الحاسبة راح تراستر أكثر من مرة — هذا طبيعي. انتظر حتى تفتح</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D recovery -->
+    <div class="info-card" style="margin-top:10px;">
+      <div class="ic-header">
+        <div class="ic-icon" style="background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.15);">🔍</div>
+        <div class="ic-title">الـ D ما ظهر بعد الفرمتة؟</div>
+      </div>
+      <div class="ic-text">
+        هذا طبيعي. ملفاتك ما انمسحت. الحل:<br><br>
+        1. كليك أيمن على <strong>Start → Disk Management</strong><br>
+        2. دور على البارتيشن اللي ما عنده حرف<br>
+        3. كليك أيمن → <strong>Change Drive Letter and Paths</strong><br>
+        4. Add → اختر حرف D → OK<br><br>
+        <strong class="hl-green">✅ ملفاتك كلها موجودة!</strong>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- AFTER SCREEN -->
+<div class="screen" id="scAfter">
+  <div class="ch">
+    <button class="ch-back" onclick="goHome()">← رجوع</button>
+    <div class="ch-title">🏁 بعد الفرمتة</div>
+    <div class="ch-sub">أسرار الخبراء + أول 5 برامج ضرورية</div>
+  </div>
+  <div class="content-body">
+
+    <div class="info-card">
+      <div class="ic-header">
+        <div class="ic-icon" style="background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.2);">⚡</div>
+        <div class="ic-title">أول 3 شغلات بعد الفرمتة</div>
+      </div>
+      <div class="ic-text">
+        <strong>1. Windows Update</strong> — حدّث كل شي أول شغلة<br><br>
+        <strong>2. تعريفات القطع</strong> — كارت الشاشة والصوت والواي فاي من مواقع شركاتهم الأصلية<br><br>
+        <strong>3. Task Manager ← Startup</strong> — عطّل البرامج اللي ما تحتاجها عند التشغيل
+      </div>
+      <div class="tip">
+        <span class="tip-ic">💡</span>
+        <div class="tip-text">إذا ما تعرف تعريف كارت الشاشة، نزّل برنامج <strong>Driver Booster</strong> يعرف ويحدث تلقائياً</div>
+      </div>
+    </div>
+
+    <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin:12px 0 10px;text-transform:uppercase;">⬡ أول 5 برامج ضرورية</div>
+
+    <div class="prog-item" style="animation-delay:.05s">
+      <span class="pi-icon">🦠</span>
+      <div class="pi-info">
+        <div class="pi-name">Windows Defender</div>
+        <div class="pi-why">موجود بالويندوز مسبقاً — فعّله ولا تحتاج شي ثاني. أقوى من كثير من برامج الحماية المدفوعة.</div>
+        <span class="pi-badge essential">مدمج</span>
+      </div>
+    </div>
+
+    <div class="prog-item" style="animation-delay:.1s">
+      <span class="pi-icon">🌐</span>
+      <div class="pi-info">
+        <div class="pi-name">Google Chrome</div>
+        <div class="pi-why">المتصفح الأسرع والأكثر توافقاً مع المواقع.</div>
+        <span class="pi-badge free">مجاني</span>
+      </div>
+    </div>
+
+    <div class="prog-item" style="animation-delay:.15s">
+      <span class="pi-icon">📦</span>
+      <div class="pi-info">
+        <div class="pi-name">WinRAR أو 7-Zip</div>
+        <div class="pi-why">لفك ضغط الملفات والمجلدات المضغوطة.</div>
+        <span class="pi-badge free">مجاني</span>
+      </div>
+    </div>
+
+    <div class="prog-item" style="animation-delay:.2s">
+      <span class="pi-icon">🎬</span>
+      <div class="pi-info">
+        <div class="pi-name">VLC Media Player</div>
+        <div class="pi-why">يشغل كل صيغ الفيديو والصوت بدون تثبيت كودكات إضافية.</div>
+        <span class="pi-badge free">مجاني</span>
+      </div>
+    </div>
+
+    <div class="prog-item" style="animation-delay:.25s">
+      <span class="pi-icon">📝</span>
+      <div class="pi-info">
+        <div class="pi-name">Notepad++ أو Office</div>
+        <div class="pi-why">للتحرير والوثائق. Notepad++ مجاني وخفيف.</div>
+        <span class="pi-badge free">مجاني</span>
+      </div>
+    </div>
+
+    <div class="info-card" style="margin-top:4px;">
+      <div class="ic-header">
+        <div class="ic-icon" style="background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.15);">🏆</div>
+        <div class="ic-title">النصيحة الذهبية النهائية</div>
+      </div>
+      <div class="ic-text">
+        بعد الفرمتة، افتح <strong>Disk Management</strong> وتأكد إن الـ D ظاهر وملفاتك موجودة.<br><br>
+        ثم سوي <strong>Windows Update</strong> كامل وأعد التشغيل.<br><br>
+        <strong class="hl-green">✅ حاسبتك الحين نظيفة وسريعة مثل اليوم الأول!</strong>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TAB BAR -->
+<div class="tabbar">
+  <div class="tab active" id="tabHome" onclick="goHome()"><span class="tab-ic">🏠</span><span>الرئيسية</span></div>
+  <div class="tab" id="tabFlash" onclick="go('flash')"><span class="tab-ic">💾</span><span>الفلاشة</span></div>
+  <div class="tab" id="tabPart" onclick="go('partition')"><span class="tab-ic">🗂️</span><span>التقسيم</span></div>
+  <div class="tab" id="tabInst" onclick="go('install')"><span class="tab-ic">⚙️</span><span>الفرمتة</span></div>
+  <div class="tab" id="tabAfter" onclick="go('after')"><span class="tab-ic">🏁</span><span>بعدها</span></div>
+</div>
+
+<script>
+const MAP={flash:'scFlash',partition:'scPartition',install:'scInstall',after:'scAfter'};
+const TABMAP={flash:'tabFlash',partition:'tabPart',install:'tabInst',after:'tabAfter'};
+
+function go(s){
+  ['scHome','scFlash','scPartition','scInstall','scAfter'].forEach(id=>{
+    const e=document.getElementById(id);if(e)e.classList.remove('active');
+  });
+  const el=document.getElementById(MAP[s]);
+  if(el){el.classList.add('active');el.scrollTop=0;}
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  const tab=document.getElementById(TABMAP[s]);if(tab)tab.classList.add('active');
+}
+function goHome(){
+  ['scFlash','scPartition','scInstall','scAfter'].forEach(id=>{
+    const e=document.getElementById(id);if(e)e.classList.remove('active');
+  });
+  document.getElementById('scHome').classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tabHome').classList.add('active');
+}
+function toggleStep(el){
+  const was=el.classList.contains('open');
+  el.closest('.content-body').querySelectorAll('.step-card').forEach(c=>c.classList.remove('open'));
+  if(!was)el.classList.add('open');
+}
+</script>
+</body>
+</html>
